@@ -2,7 +2,7 @@
   "name": "KidsVideo - Videos Seguros para Niños",
   "short_name": "KidsVideo",
   "description": "Una aplicación PWA para videos educativos y entretenidos, diseñada especialmente para niños con contenido seguro y categorizado.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "id": "./kidsvideos-app",
   "display": "standalone",
   "orientation": "portrait",
