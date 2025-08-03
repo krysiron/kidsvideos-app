@@ -13,22 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="KidsVideo">
     <meta name="description" content="Videos divertidos y seguros para niños">
     
-    <!-- Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="./icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./icon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="./icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="./icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="./icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="./icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="./icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="./icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="./icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="./icon-72x72.png">
-
     <!-- Manifest -->
     <link rel="manifest" href="./manifest.json">
-    
     
     <style>
         * {
@@ -103,7 +89,7 @@
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            display: none; /* Oculto por defecto, solo aparece en configuración */
+            display: none;
         }
 
         .upload-section h2 {
@@ -435,6 +421,20 @@
             font-weight: bold;
         }
 
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
         /* Mejoras para móviles */
         @media (max-width: 768px) {
             .header h1 {
@@ -478,7 +478,6 @@
             }
         }
 
-        /* Optimizaciones para Android */
         @media (max-width: 480px) {
             .videos-grid {
                 grid-template-columns: 1fr;
@@ -499,7 +498,6 @@
             }
         }
 
-        /* PWA Install Banner */
         .install-banner {
             position: fixed;
             bottom: 20px;
@@ -526,20 +524,6 @@
             font-weight: bold;
             touch-action: manipulation;
         }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            z-index: 10000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
     </style>
 </head>
 <body>
@@ -551,7 +535,6 @@
         <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
     </div>
 
-    <!-- Sección de upload movida a dentro del modal de configuración -->
     <div class="upload-section" id="uploadSection">
         <h2>📽️ Agregar Nuevo Video</h2>
         <div class="input-group">
@@ -637,7 +620,6 @@
             </div>
 
             <div id="configContent" style="display: none;">
-                <!-- BOTÓN AGREGAR VIDEO MOVIDO AQUÍ -->
                 <div class="config-item">
                     <div>
                         <h4>➕ Agregar Videos</h4>
@@ -700,7 +682,7 @@
         let videos = [];
         let currentFilter = 'all';
         let deferredPrompt;
-        let configPassword = '1234'; // Clave por defecto
+        let configPassword = '1234';
 
         // PWA Install Logic
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -733,7 +715,7 @@
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('./sw.js')
                     .then((registration) => {
                         console.log('SW registrado correctamente:', registration.scope);
                     })
@@ -748,7 +730,7 @@
             document.getElementById('configModal').style.display = 'flex';
             document.getElementById('passwordSection').style.display = 'block';
             document.getElementById('configContent').style.display = 'none';
-            document.getElementById('uploadSection').style.display = 'none'; // Ocultar formulario
+            document.getElementById('uploadSection').style.display = 'none';
             document.getElementById('configPassword').value = '';
             document.getElementById('configPassword').focus();
             updateVideoCount();
@@ -756,7 +738,7 @@
 
         function closeConfigModal() {
             document.getElementById('configModal').style.display = 'none';
-            document.getElementById('uploadSection').style.display = 'none'; // Ocultar formulario al cerrar
+            document.getElementById('uploadSection').style.display = 'none';
         }
 
         function validatePassword() {
@@ -771,17 +753,9 @@
             }
         }
 
-        // NUEVA FUNCIÓN PARA MOSTRAR FORMULARIO DE AGREGAR VIDEO
         function showAddVideoForm() {
             document.getElementById('uploadSection').style.display = 'block';
-            // Limpiar formulario
-            document.getElementById('videoTitle').value = '';
-            document.getElementById('youtubeUrl').value = '';
-            document.getElementById('videoDescription').value = '';
-            document.getElementById('videoFile').value = '';
-            document.getElementById('videoType').value = 'youtube';
-            document.getElementById('youtubeInput').style.display = 'block';
-            document.getElementById('localInput').style.display = 'none';
+            clearForm();
         }
 
         function updateVideoCount() {
@@ -822,39 +796,12 @@
             }
         }
 
-        // Enter key para password
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('configPassword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    validatePassword();
-                }
-            });
-        });
-
-        // Change video type
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('videoType').addEventListener('change', function() {
-                const youtubeInput = document.getElementById('youtubeInput');
-                const localInput = document.getElementById('localInput');
-                
-                if (this.value === 'youtube') {
-                    youtubeInput.style.display = 'block';
-                    localInput.style.display = 'none';
-                } else {
-                    youtubeInput.style.display = 'none';
-                    localInput.style.display = 'block';
-                }
-            });
-        });
-
-        // Extract YouTube video ID
         function getYouTubeVideoId(url) {
             const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
             const match = url.match(regExp);
             return (match && match[7].length === 11) ? match[7] : false;
         }
 
-        // Add video function
         function addVideo() {
             const type = document.getElementById('videoType').value;
             const title = document.getElementById('videoTitle').value;
@@ -865,3 +812,89 @@
                 showToast('❌ Por favor, ingresa un título para el video');
                 return;
             }
+
+            if (type === 'youtube') {
+                const youtubeUrl = document.getElementById('youtubeUrl').value;
+                if (!youtubeUrl) {
+                    showToast('❌ Por favor, ingresa una URL de YouTube');
+                    return;
+                }
+                
+                const videoId = getYouTubeVideoId(youtubeUrl);
+                if (!videoId) {
+                    showToast('❌ URL de YouTube no válida');
+                    return;
+                }
+                
+                const video = {
+                    id: Date.now(),
+                    type: 'youtube',
+                    title: title,
+                    category: category,
+                    description: description,
+                    videoId: videoId,
+                    thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+                    url: youtubeUrl
+                };
+                
+                videos.push(video);
+                
+            } else if (type === 'local') {
+                const fileInput = document.getElementById('videoFile');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    showToast('❌ Por favor, selecciona un archivo de video');
+                    return;
+                }
+                
+                const videoUrl = URL.createObjectURL(file);
+                
+                const video = {
+                    id: Date.now(),
+                    type: 'local',
+                    title: title,
+                    category: category,
+                    description: description,
+                    videoUrl: videoUrl,
+                    file: file
+                };
+                
+                videos.push(video);
+            }
+            
+            saveVideos();
+            renderVideos();
+            clearForm();
+            document.getElementById('uploadSection').style.display = 'none';
+            showToast('✅ Video agregado exitosamente');
+        }
+
+        function clearForm() {
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('videoDescription').value = '';
+            document.getElementById('videoFile').value = '';
+            document.getElementById('videoType').value = 'youtube';
+            document.getElementById('youtubeInput').style.display = 'block';
+            document.getElementById('localInput').style.display = 'none';
+        }
+
+        function saveVideos() {
+            const videosToSave = videos.map(video => {
+                if (video.type === 'local') {
+                    return {
+                        ...video,
+                        videoUrl: null,
+                        file: null
+                    };
+                }
+                return video;
+            });
+            localStorage.setItem('kidsVideos', JSON.stringify(videosToSave));
+        }
+
+        function loadVideos() {
+            const saved = localStorage.getItem('kidsVideos');
+            if (saved) {
+                videos = JSON.parse(saved);
