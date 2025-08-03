@@ -65,7 +65,13 @@
             opacity: 0.9;
         }
 
-        .config-btn {
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .config-btn, .add-btn {
             background: rgba(255,255,255,0.2);
             border: 2px solid white;
             color: white;
@@ -76,11 +82,24 @@
             cursor: pointer;
             transition: all 0.3s ease;
             touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .config-btn:hover, .config-btn:active {
+        .config-btn:hover, .config-btn:active,
+        .add-btn:hover, .add-btn:active {
             background: rgba(255,255,255,0.3);
             transform: scale(1.1);
+        }
+
+        .add-btn {
+            background: rgba(76, 205, 196, 0.9);
+            border-color: #4ecdc4;
+        }
+
+        .add-btn:hover, .add-btn:active {
+            background: rgba(76, 205, 196, 1);
         }
 
         .upload-section {
@@ -149,6 +168,11 @@
 
         .btn.danger {
             background: linear-gradient(45deg, #ff6b6b, #e74c3c);
+        }
+
+        .btn.cancel {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            margin-top: 10px;
         }
 
         .categories {
@@ -498,10 +522,14 @@
                 gap: 10px;
             }
 
-            .config-btn {
+            .config-btn, .add-btn {
                 width: 40px;
                 height: 40px;
                 font-size: 20px;
+            }
+
+            .header-buttons {
+                gap: 15px;
             }
         }
 
@@ -532,7 +560,10 @@
             <h1>🎬 KidsVideo 🌈</h1>
             <p>¡Videos divertidos y seguros para niños!</p>
         </div>
-        <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
+        <div class="header-buttons">
+            <button class="add-btn" onclick="showAddVideoForm()" title="Agregar Video">➕</button>
+            <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
+        </div>
     </div>
 
     <div class="upload-section" id="uploadSection">
@@ -578,6 +609,7 @@
         </div>
         
         <button class="btn" onclick="addVideo()">➕ Agregar Video</button>
+        <button class="btn cancel" onclick="hideAddVideoForm()">❌ Cancelar</button>
     </div>
 
     <div class="categories">
@@ -593,7 +625,7 @@
     <div id="videosGrid" class="videos-grid">
         <div class="no-videos">
             <h3>🎬 ¡Bienvenido a KidsVideo!</h3>
-            <p>Puedes subir tus videos de YouTube o tus videos propios desde el engranaje ⚙️</p>
+            <p>Puedes agregar videos usando el botón ➕ o acceder a más opciones con el engranaje ⚙️</p>
         </div>
     </div>
 
@@ -763,6 +795,18 @@
 
         function showAddVideoForm() {
             document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('configModal').style.display = 'none';
+            clearForm();
+            
+            // Scroll suave hacia el formulario
+            document.getElementById('uploadSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+
+        function hideAddVideoForm() {
+            document.getElementById('uploadSection').style.display = 'none';
             clearForm();
         }
 
@@ -949,8 +993,8 @@
                     <div class="no-videos">
                         <h3>🎬 ${currentFilter === 'all' ? '¡Bienvenido a KidsVideo!' : 'No hay videos en esta categoría'}</h3>
                         <p>${currentFilter === 'all' 
-                            ? 'Puedes subir tus videos de YouTube o tus videos propios desde el engranaje ⚙️' 
-                            : 'Puedes agregar videos desde la configuración ⚙️'}</p>
+                            ? 'Puedes agregar videos usando el botón ➕ o acceder a más opciones con el engranaje ⚙️' 
+                            : 'Puedes agregar videos desde el botón ➕'}</p>
                     </div>
                 `;
                 return;
@@ -1066,6 +1110,7 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeConfigModal();
+                hideAddVideoForm();
             }
             if (e.key === 'Enter' && document.getElementById('configPassword') === document.activeElement) {
                 validatePassword();
