@@ -12,22 +12,21 @@
     <meta name="apple-mobile-web-app-title" content="KidsVideo">
     <meta name="description" content="Videos divertidos y seguros para niños">
     
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/icon-72x72.png">
 
-<!-- Icons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/icon-128x128.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/icon-128x128.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/icon-96x96.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/icon-72x72.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/icon-72x72.png">
-<link rel="apple-touch-icon" sizes="57x57" href="/icon-72x72.png">
-
-<!-- Manifest -->
-<link rel="manifest" href="/manifest.json">
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
     
     <style>
         * {
@@ -37,25 +36,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-
-<script>
-  // Registrar Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('/sw.js')
-        .then(function(registration) {
-          console.log('ServiceWorker registrado exitosamente:', registration.scope);
-        })
-        .catch(function(error) {
-          console.log('Error al registrar ServiceWorker:', error);
-        });
-    });
-  }
-</script>
-
-</body>
-</html>
-        
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -75,6 +55,13 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            flex: 1;
         }
 
         .header h1 {
@@ -88,6 +75,24 @@
             color: white;
             font-size: 1em;
             opacity: 0.9;
+        }
+
+        .config-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .config-btn:hover, .config-btn:active {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
         }
 
         .upload-section {
@@ -153,6 +158,10 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
+        .btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #e74c3c);
+        }
+
         .categories {
             display: flex;
             justify-content: center;
@@ -198,6 +207,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             touch-action: manipulation;
+            position: relative;
         }
 
         .video-card:hover, .video-card:active {
@@ -386,10 +396,59 @@
             font-weight: bold;
             display: none;
             touch-action: manipulation;
+            z-index: 10;
         }
 
         .video-card:hover .delete-btn {
             display: block;
+        }
+
+        .config-section {
+            padding: 20px;
+        }
+
+        .config-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .config-item h4 {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .config-item p {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        .password-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .password-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .password-input button {
+            padding: 12px 20px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         /* Mejoras para móviles */
@@ -421,6 +480,17 @@
             .upload-section {
                 margin: 10px;
                 padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .config-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
             }
         }
 
@@ -472,12 +542,29 @@
             font-weight: bold;
             touch-action: manipulation;
         }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🎬 KidsVideo 🌈</h1>
-        <p>¡Videos divertidos y seguros para niños!</p>
+        <div class="header-content">
+            <h1>🎬 KidsVideo 🌈</h1>
+            <p>¡Videos divertidos y seguros para niños!</p>
+        </div>
+        <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
     </div>
 
     <button class="toggle-form" onclick="toggleForm()">➕ Agregar Nuevo Video</button>
@@ -544,11 +631,68 @@
         </div>
     </div>
 
+    <!-- Modal de Video -->
     <div id="videoModal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal()">×</button>
             <div id="videoPlayer" class="video-player"></div>
             <div id="videoModalInfo" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeConfigModal()">×</button>
+            <h2 style="color: #ff6b6b; margin-bottom: 20px; text-align: center;">⚙️ Configuración</h2>
+            
+            <div id="passwordSection">
+                <div class="password-input">
+                    <input type="password" id="configPassword" placeholder="Ingresa la clave (1234)" maxlength="4">
+                    <button onclick="validatePassword()">Acceder</button>
+                </div>
+            </div>
+
+            <div id="configContent" style="display: none;">
+                <div class="config-section">
+                    <div class="config-item">
+                        <div>
+                            <h4>Gestión de Videos</h4>
+                            <p>Eliminar todos los videos almacenados</p>
+                        </div>
+                        <button class="btn danger" onclick="clearAllVideos()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                            🗑️ Eliminar Todos
+                        </button>
+                    </div>
+
+                    <div class="config-item">
+                        <div>
+                            <h4>Restablecer App</h4>
+                            <p>Volver a la configuración inicial</p>
+                        </div>
+                        <button class="btn danger" onclick="resetApp()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                            🔄 Restablecer
+                        </button>
+                    </div>
+
+                    <div class="config-item">
+                        <div>
+                            <h4>Cambiar Clave</h4>
+                            <p>Modificar la clave de acceso a configuración</p>
+                        </div>
+                        <button class="btn" onclick="changePassword()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                            🔑 Cambiar
+                        </button>
+                    </div>
+
+                    <div class="config-item">
+                        <div>
+                            <h4>Información</h4>
+                            <p>Videos almacenados: <span id="videoCount">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -562,6 +706,7 @@
         let videos = [];
         let currentFilter = 'all';
         let deferredPrompt;
+        let configPassword = '1234'; // Clave por defecto
 
         // PWA Install Logic
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -594,45 +739,88 @@
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'kidsvideos-v1';
-                    const urlsToCache = [
-                        '/',
-                        '/kidsvideos.html'
-                    ];
-
-                    self.addEventListener('install', (event) => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then((cache) => cache.addAll(urlsToCache))
-                        );
-                    });
-
-                    self.addEventListener('fetch', (event) => {
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then((response) => {
-                                    if (response) {
-                                        return response;
-                                    }
-                                    return fetch(event.request);
-                                })
-                        );
-                    });
-                `;
-                
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                
-                navigator.serviceWorker.register(swUrl)
+                navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
-                        console.log('SW registrado correctamente');
+                        console.log('SW registrado correctamente:', registration.scope);
                     })
                     .catch((error) => {
                         console.log('Error al registrar SW:', error);
                     });
             });
         }
+
+        // Configuración
+        function openConfig() {
+            document.getElementById('configModal').style.display = 'flex';
+            document.getElementById('passwordSection').style.display = 'block';
+            document.getElementById('configContent').style.display = 'none';
+            document.getElementById('configPassword').value = '';
+            document.getElementById('configPassword').focus();
+            updateVideoCount();
+        }
+
+        function closeConfigModal() {
+            document.getElementById('configModal').style.display = 'none';
+        }
+
+        function validatePassword() {
+            const inputPassword = document.getElementById('configPassword').value;
+            if (inputPassword === configPassword) {
+                document.getElementById('passwordSection').style.display = 'none';
+                document.getElementById('configContent').style.display = 'block';
+                updateVideoCount();
+            } else {
+                showToast('❌ Clave incorrecta');
+                document.getElementById('configPassword').value = '';
+            }
+        }
+
+        function updateVideoCount() {
+            document.getElementById('videoCount').textContent = videos.length;
+        }
+
+        function clearAllVideos() {
+            if (confirm('¿Estás seguro de que quieres eliminar TODOS los videos?')) {
+                videos = [];
+                saveVideos();
+                renderVideos();
+                updateVideoCount();
+                showToast('🗑️ Todos los videos eliminados');
+            }
+        }
+
+        function resetApp() {
+            if (confirm('¿Estás seguro de que quieres restablecer la aplicación?\nEsto eliminará todos los videos y configuraciones.')) {
+                localStorage.clear();
+                configPassword = '1234';
+                videos = [];
+                renderVideos();
+                closeConfigModal();
+                showToast('🔄 Aplicación restablecida');
+            }
+        }
+
+        function changePassword() {
+            const newPassword = prompt('Ingresa la nueva clave (4 dígitos):', '');
+            if (newPassword !== null) {
+                if (newPassword.length === 4 && /^\d+$/.test(newPassword)) {
+                    configPassword = newPassword;
+                    localStorage.setItem('kidsVideoPassword', newPassword);
+                    showToast('🔑 Clave cambiada exitosamente');
+                } else {
+                    showToast('❌ La clave debe tener exactamente 4 dígitos');
+                }
+            }
+        }
+
+        // Enter key para password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('configPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validatePassword();
+                }
+            });
+        });
 
         // Toggle form visibility
         function toggleForm() {
@@ -679,7 +867,7 @@
             const description = document.getElementById('videoDescription').value;
 
             if (!title) {
-                alert('Por favor, ingresa un título para el video');
+                showToast('❌ Por favor, ingresa un título para el video');
                 return;
             }
 
@@ -694,305 +882,4 @@
             if (type === 'youtube') {
                 const youtubeUrl = document.getElementById('youtubeUrl').value;
                 if (!youtubeUrl) {
-                    alert('Por favor, ingresa una URL de YouTube');
-                    return;
-                }
-                
-                const videoId = getYouTubeVideoId(youtubeUrl);
-                if (!videoId) {
-                    alert('URL de YouTube no válida');
-                    return;
-                }
-                
-                videoData.youtubeId = videoId;
-                videoData.thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-            } else {
-                const fileInput = document.getElementById('videoFile');
-                if (!fileInput.files[0]) {
-                    alert('Por favor, selecciona un archivo de video');
-                    return;
-                }
-                
-                const file = fileInput.files[0];
-                const fileUrl = URL.createObjectURL(file);
-                videoData.fileUrl = fileUrl;
-                videoData.fileName = file.name;
-            }
-
-            videos.push(videoData);
-            saveVideos();
-            clearForm();
-            renderVideos();
-            toggleForm();
-            
-            // Show success message
-            showToast('¡Video agregado exitosamente! 🎉');
-        }
-
-        // Show toast message
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(45deg, #4ecdc4, #45b7d1);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 25px;
-                font-weight: bold;
-                z-index: 10000;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            `;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // Clear form
-        function clearForm() {
-            document.getElementById('videoTitle').value = '';
-            document.getElementById('youtubeUrl').value = '';
-            document.getElementById('videoFile').value = '';
-            document.getElementById('videoDescription').value = '';
-        }
-
-        // Save videos to localStorage
-        function saveVideos() {
-            const videosToSave = videos.map(video => {
-                const { fileUrl, ...videoToSave } = video;
-                return videoToSave;
-            });
-            localStorage.setItem('kidsVideos', JSON.stringify(videosToSave));
-        }
-
-        // Load videos from localStorage
-        function loadVideos() {
-            const savedVideos = localStorage.getItem('kidsVideos');
-            if (savedVideos) {
-                videos = JSON.parse(savedVideos);
-            }
-        }
-
-        // Filter videos by category
-        function filterVideos(category) {
-            currentFilter = category;
-            
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            renderVideos();
-        }
-
-        // Delete video
-        function deleteVideo(videoId) {
-            if (confirm('¿Estás seguro de que quieres eliminar este video?')) {
-                videos = videos.filter(video => video.id !== videoId);
-                saveVideos();
-                renderVideos();
-                showToast('Video eliminado correctamente');
-            }
-        }
-
-        // Render videos
-        function renderVideos() {
-            const videosGrid = document.getElementById('videosGrid');
-            const filteredVideos = currentFilter === 'all' ? videos : videos.filter(video => video.category === currentFilter);
-
-            if (filteredVideos.length === 0) {
-                videosGrid.innerHTML = `
-                    <div class="no-videos">
-                        <h3>🎬 No hay videos en esta categoría</h3>
-                        <p>¡Agrega algunos videos para empezar!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            videosGrid.innerHTML = filteredVideos.map(video => `
-                <div class="video-card" onclick="playVideo(${video.id})">
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVideo(${video.id})">×</button>
-                    <div class="video-thumbnail">
-                        ${video.type === 'youtube' 
-                            ? `<img src="${video.thumbnail}" alt="${video.title}" style="width: 100%; height: 100%; object-fit: cover;">` 
-                            : `<div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">📹</div>`
-                        }
-                        <div class="play-icon">▶️</div>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-category">${getCategoryIcon(video.category)} ${getCategoryName(video.category)}</div>
-                        <div class="video-title">${video.title}</div>
-                        <div class="video-description">${video.description}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Get category name
-        function getCategoryName(category) {
-            const categories = {
-                'educativo': 'Educativo',
-                'canciones': 'Canciones',
-                'cuentos': 'Cuentos',
-                'animales': 'Animales',
-                'juegos': 'Juegos',
-                'arte': 'Arte y Manualidades'
-            };
-            return categories[category] || category;
-        }
-
-        // Get category icon
-        function getCategoryIcon(category) {
-            const icons = {
-                'educativo': '🎓',
-                'canciones': '🎵',
-                'cuentos': '📚',
-                'animales': '🐾',
-                'juegos': '🎮',
-                'arte': '🎨'
-            };
-            return icons[category] || '🎬';
-        }
-
-        // Play video
-        function playVideo(videoId) {
-            const video = videos.find(v => v.id === videoId);
-            if (!video) return;
-
-            const modal = document.getElementById('videoModal');
-            const player = document.getElementById('videoPlayer');
-            const info = document.getElementById('videoModalInfo');
-
-            if (video.type === 'youtube') {
-                player.innerHTML = `
-                    <iframe src="https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&playsinline=1" 
-                            allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
-                `;
-            } else {
-                if (video.fileUrl) {
-                    player.innerHTML = `
-                        <video controls autoplay playsinline>
-                            <source src="${video.fileUrl}" type="video/mp4">
-                            Tu navegador no soporta el elemento video.
-                        </video>
-                    `;
-                } else {
-                    player.innerHTML = `
-                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0; color: #666;">
-                            <div style="text-align: center;">
-                                <h3>📹 Video no disponible</h3>
-                                <p>El archivo local no está disponible.<br>Vuelve a subirlo para verlo.</p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            info.innerHTML = `
-                <h3>${video.title}</h3>
-                <div class="video-category">${getCategoryIcon(video.category)} ${getCategoryName(video.category)}</div>
-                <p style="margin-top: 10px;">${video.description}</p>
-            `;
-
-            modal.style.display = 'flex';
-        }
-
-        // Close modal
-        function closeModal() {
-            const modal = document.getElementById('videoModal');
-            const player = document.getElementById('videoPlayer');
-            modal.style.display = 'none';
-            player.innerHTML = '';
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('videoModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-        });
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            loadVideos();
-            renderVideos();
-            
-            // Add example videos if none exist
-            if (videos.length === 0) {
-                addExampleVideos();
-            }
-        });
-
-        // Add example videos
-        function addExampleVideos() {
-            const examples = [
-                {
-                    id: 1,
-                    title: "Peppa Pig - Charcos de Lodo",
-                    category: "animales",
-                    description: "Peppa y George saltan en charcos de lodo",
-                    type: "youtube",
-                    youtubeId: "jNQXAC9IVRw",
-                    thumbnail: "https://img.youtube.com/vi/jNQXAC9IVRw/maxresdefault.jpg"
-                },
-                {
-                    id: 2,
-                    title: "Canciones Infantiles - Los Pollitos Dicen",
-                    category: "canciones",
-                    description: "Canción tradicional para niños pequeños",
-                    type: "youtube",
-                    youtubeId: "EqY3pnhXG8g",
-                    thumbnail: "https://img.youtube.com/vi/EqY3pnhXG8g/maxresdefault.jpg"
-                },
-                {
-                    id: 3,
-                    title: "Aprende los Números del 1 al 10",
-                    category: "educativo",
-                    description: "Video educativo para aprender a contar",
-                    type: "youtube",
-                    youtubeId: "DR-cfDsHCGA",
-                    thumbnail: "https://img.youtube.com/vi/DR-cfDsHCGA/maxresdefault.jpg"
-                }
-            ];
-            
-            videos = examples;
-            saveVideos();
-            renderVideos();
-        }
-
-        // Prevent context menu on long press (mobile)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // Handle back button
-        window.addEventListener('popstate', function(e) {
-            const modal = document.getElementById('videoModal');
-            if (modal.style.display === 'flex') {
-                closeModal();
-                e.preventDefault();
-            }
-        });
-
-        // Optimize for mobile performance
-        let resizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
-                renderVideos();
-            }, 250);
-        });
-    </script>
-</body>
-</html>
-
-
-
+                    showToast('❌ Por favor, ingresa una
