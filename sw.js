@@ -1,22 +1,13 @@
 // Service Worker para Kids Videos App
-const CACHE_NAME = 'kidsvideos-app-v2';
-const STATIC_CACHE_NAME = 'kidsvideos-static-v2';
-const DYNAMIC_CACHE_NAME = 'kidsvideos-dynamic-v2';
+const CACHE_NAME = 'kidsvideos-app-v1';
+const STATIC_CACHE_NAME = 'kidsvideos-static-v1';
+const DYNAMIC_CACHE_NAME = 'kidsvideos-dynamic-v1';
 
 // Recursos estáticos para cachear
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192x192.png',
-  '/icon-512x512.png',
-  // Agregar otros iconos necesarios
-  '/icon-72x72.png',
-  '/icon-96x96.png',
-  '/icon-128x128.png',
-  '/icon-144x144.png',
-  '/icon-152x152.png',
-  '/icon-384x384.png'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 // Recursos dinámicos que se pueden cachear
@@ -34,7 +25,10 @@ self.addEventListener('install', (event) => {
       // Cachear recursos estáticos
       caches.open(STATIC_CACHE_NAME).then((cache) => {
         console.log('[SW] Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+        return cache.addAll(STATIC_ASSETS).catch(err => {
+          console.log('[SW] Failed to cache some static assets:', err);
+          // No fallar completamente si algunos recursos no se pueden cachear
+        });
       }),
       // Forzar activación inmediata
       self.skipWaiting()
@@ -70,6 +64,11 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  // Ignorar extensiones del navegador y otros protocolos
+  if (!request.url.startsWith('http')) {
+    return;
+  }
 
   // Estrategia Cache First para recursos estáticos
   if (STATIC_ASSETS.some(asset => request.url.includes(asset))) {
@@ -146,7 +145,7 @@ async function networkFirst(request, cacheName) {
     // Fallback para navegación
     if (request.mode === 'navigate') {
       const fallbackCache = await caches.open(STATIC_CACHE_NAME);
-      return fallbackCache.match('/');
+      return fallbackCache.match('./') || fallbackCache.match('./index.html');
     }
     
     return new Response('Sin conexión', { 

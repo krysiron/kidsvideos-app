@@ -435,6 +435,33 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        .install-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .install-banner button {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            touch-action: manipulation;
+        }
+
         /* Mejoras para móviles */
         @media (max-width: 768px) {
             .header h1 {
@@ -497,33 +524,6 @@
                 gap: 8px;
             }
         }
-
-        .install-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: white;
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
-        }
-
-        .install-banner button {
-            background: white;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            touch-action: manipulation;
-        }
     </style>
 </head>
 <body>
@@ -539,7 +539,7 @@
         <h2>📽️ Agregar Nuevo Video</h2>
         <div class="input-group">
             <label for="videoType">Tipo de Video:</label>
-            <select id="videoType">
+            <select id="videoType" onchange="toggleVideoInput()">
                 <option value="youtube">Video de YouTube</option>
                 <option value="local">Video Local</option>
             </select>
@@ -684,6 +684,14 @@
         let deferredPrompt;
         let configPassword = '1234';
 
+        // Cargar configuración guardada
+        function loadConfig() {
+            const savedPassword = localStorage.getItem('kidsVideoPassword');
+            if (savedPassword) {
+                configPassword = savedPassword;
+            }
+        }
+
         // PWA Install Logic
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -796,6 +804,20 @@
             }
         }
 
+        function toggleVideoInput() {
+            const type = document.getElementById('videoType').value;
+            const youtubeInput = document.getElementById('youtubeInput');
+            const localInput = document.getElementById('localInput');
+            
+            if (type === 'youtube') {
+                youtubeInput.style.display = 'block';
+                localInput.style.display = 'none';
+            } else {
+                youtubeInput.style.display = 'none';
+                localInput.style.display = 'block';
+            }
+        }
+
         function getYouTubeVideoId(url) {
             const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
             const match = url.match(regExp);
@@ -898,3 +920,215 @@
             const saved = localStorage.getItem('kidsVideos');
             if (saved) {
                 videos = JSON.parse(saved);
+                // Regenerar URLs para videos locales si existen
+                videos.forEach(video => {
+                    if (video.type === 'local' && !video.videoUrl) {
+                        // Los videos locales se pierden al recargar
+                        // Se podría implementar IndexedDB para persistencia real
+                    }
+                });
+            } else {
+                addExampleVideos();
+            }
+        }
+
+        function addExampleVideos() {
+            videos = [
+                {
+                    id: 1,
+                    type: 'youtube',
+                    title: 'Peppa Pig - Charcos de Lodo',
+                    category: 'canciones',
+                    description: 'Peppa y George saltan en charcos de lodo',
+                    videoId: 'Ezk0b4rxnc4',
+                    thumbnail: 'https://img.youtube.com/vi/Ezk0b4rxnc4/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=Ezk0b4rxnc4'
+                },
+                {
+                    id: 2,
+                    type: 'youtube',
+                    title: 'Pocoyó - Aprende los Colores',
+                    category: 'educativo',
+                    description: 'Pocoyó enseña los colores de manera divertida',
+                    videoId: '4VuGTB5J8BY',
+                    thumbnail: 'https://img.youtube.com/vi/4VuGTB5J8BY/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=4VuGTB5J8BY'
+                },
+                {
+                    id: 3,
+                    type: 'youtube',
+                    title: 'La Granja de Zenón - Canciones Infantiles',
+                    category: 'canciones',
+                    description: 'Las mejores canciones de la granja',
+                    videoId: 'sLT1PFHK0vo',
+                    thumbnail: 'https://img.youtube.com/vi/sLT1PFHK0vo/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=sLT1PFHK0vo'
+                }
+            ];
+            saveVideos();
+        }
+
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            const filteredVideos = currentFilter === 'all' 
+                ? videos 
+                : videos.filter(video => video.category === currentFilter);
+
+            if (filteredVideos.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-videos">
+                        <h3>🎬 ${currentFilter === 'all' ? '¡Bienvenido a KidsVideo!' : 'No hay videos en esta categoría'}</h3>
+                        <p>${currentFilter === 'all' 
+                            ? 'Puedes subir tus videos de YouTube o tus videos propios desde el engranaje ⚙️' 
+                            : 'Puedes agregar videos desde la configuración ⚙️'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filteredVideos.map(video => `
+                <div class="video-card" onclick="playVideo(${video.id})">
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVideo(${video.id})" title="Eliminar video">×</button>
+                    <div class="video-thumbnail">
+                        ${video.type === 'youtube' 
+                            ? `<img src="${video.thumbnail}" alt="${video.title}" loading="lazy">` 
+                            : `<div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">🎬</div>`
+                        }
+                        <div class="play-icon">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-category">${getCategoryName(video.category)}</div>
+                        <div class="video-title">${video.title}</div>
+                        <div class="video-description">${video.description}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'educativo': '🎓 Educativo',
+                'canciones': '🎵 Canciones',
+                'cuentos': '📚 Cuentos',
+                'animales': '🐾 Animales',
+                'juegos': '🎮 Juegos',
+                'arte': '🎨 Arte'
+            };
+            return categories[category] || category;
+        }
+
+        function filterVideos(category) {
+            currentFilter = category;
+            
+            // Actualizar botones de categoría
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderVideos();
+        }
+
+        function playVideo(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (!video) return;
+
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const info = document.getElementById('videoModalInfo');
+
+            if (video.type === 'youtube') {
+                player.innerHTML = `
+                    <iframe src="https://www.youtube.com/embed/${video.videoId}?autoplay=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                `;
+            } else if (video.type === 'local' && video.videoUrl) {
+                player.innerHTML = `
+                    <video controls autoplay>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        Tu navegador no soporta la reproducción de video.
+                    </video>
+                `;
+            }
+
+            info.innerHTML = `
+                <div class="video-category">${getCategoryName(video.category)}</div>
+                <h3 style="color: #333; margin: 10px 0;">${video.title}</h3>
+                <p style="color: #666; line-height: 1.5;">${video.description}</p>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            modal.style.display = 'none';
+            player.innerHTML = '';
+        }
+
+        function deleteVideo(videoId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este video?')) {
+                videos = videos.filter(video => video.id !== videoId);
+                saveVideos();
+                renderVideos();
+                updateVideoCount();
+                showToast('🗑️ Video eliminado');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+
+        // Manejar teclas
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeConfigModal();
+            }
+            if (e.key === 'Enter' && document.getElementById('configPassword') === document.activeElement) {
+                validatePassword();
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('videoModal')) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('configModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('configModal')) {
+                closeConfigModal();
+            }
+        });
+
+        // Inicializar app
+        window.addEventListener('load', () => {
+            loadConfig();
+            loadVideos();
+            renderVideos();
+            
+            // Ocultar banner de instalación después de un tiempo si no se usa
+            setTimeout(() => {
+                hideInstallBanner();
+            }, 10000);
+        });
+
+        // Prevenir zoom en inputs en iOS
+        document.addEventListener('touchstart', function() {}, true);
+    </script>
+</body>
+</html>

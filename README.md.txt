@@ -6,6 +6,10 @@ Una Progressive Web App (PWA) diseñada para que los niños disfruten de videos 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+## 🚀 Demo en Vivo
+
+Visita la aplicación: [KidsVideo App](https://tu-usuario.github.io/kidsvideos-app/)
+
 ## ✨ Características
 
 - 📱 **PWA Completa**: Instalable en dispositivos móviles y desktop
@@ -15,15 +19,36 @@ Una Progressive Web App (PWA) diseñada para que los niños disfruten de videos 
 - 🎨 **Diseño Infantil**: Interfaz colorida y amigable para niños
 - 💾 **Almacenamiento Local**: Los videos se guardan en el dispositivo
 - 🚀 **Funciona Offline**: Service Worker para funcionamiento sin conexión
+- 🔒 **Configuración Protegida**: Acceso con clave para administrar videos
 
-## 🚀 Instalación y Uso
+## 🛠️ Instalación y Despliegue
 
-### Opción 1: Usar directamente en el navegador
-1. Descarga o clona este repositorio
-2. Abre `index.html` en tu navegador web
-3. El navegador te ofrecerá instalar la app automáticamente
+### Opción 1: Desplegar en GitHub Pages
 
-### Opción 2: Servidor local
+1. **Fork o clona este repositorio**
+```bash
+git clone https://github.com/tu-usuario/kidsvideos-app.git
+cd kidsvideos-app
+```
+
+2. **Sube los archivos a tu repositorio**
+```bash
+git add .
+git commit -m "🎬 KidsVideo PWA - App de videos seguros para niños"
+git push origin main
+```
+
+3. **Activa GitHub Pages**
+   - Ve a Settings → Pages
+   - Source: Deploy from a branch
+   - Branch: main / (root)
+   - Guarda y espera unos minutos
+
+4. **Tu app estará disponible en:**
+   `https://tu-usuario.github.io/kidsvideos-app/`
+
+### Opción 2: Servidor Local para Desarrollo
+
 ```bash
 # Con Python 3
 python -m http.server 8000
@@ -38,6 +63,11 @@ php -S localhost:8000
 Luego visita `http://localhost:8000`
 
 ## 📱 Funcionalidades
+
+### ⚙️ Acceso a Configuración
+- **Clave por defecto**: `1234`
+- Cambiar la clave desde la configuración
+- Protección para evitar modificaciones accidentales
 
 ### ➕ Agregar Videos
 - **YouTube**: Pega la URL del video de YouTube
@@ -54,9 +84,10 @@ Luego visita `http://localhost:8000`
 
 ### 🎮 Gestión de Videos
 - ✅ Reproducción en modal fullscreen
-- 🗑️ Eliminación de videos
+- 🗑️ Eliminación de videos individuales
 - 🔍 Filtrado por categorías
 - 💾 Almacenamiento persistente
+- 📊 Contador de videos almacenados
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -75,16 +106,8 @@ kidsvideos-app/
 ├── manifest.json       # Configuración PWA
 ├── sw.js              # Service Worker
 ├── README.md          # Esta documentación
-├── .gitignore         # Archivos a ignorar en Git
-└── icons/             # Iconos de la aplicación
-    ├── icon-72x72.png
-    ├── icon-96x96.png
-    ├── icon-128x128.png
-    ├── icon-144x144.png
-    ├── icon-152x152.png
-    ├── icon-192x192.png
-    ├── icon-384x384.png
-    └── icon-512x512.png
+├── LICENSE            # Licencia MIT
+└── .gitignore         # Archivos a ignorar en Git
 ```
 
 ## 🎯 Características PWA
@@ -94,6 +117,7 @@ kidsvideos-app/
 - ✅ **Offline**: Funciona sin conexión a internet
 - ✅ **Seguro**: Preparado para servirse por HTTPS
 - ✅ **App Shell**: Carga rápida con Service Worker
+- ✅ **Iconos Dinámicos**: Iconos SVG generados automáticamente
 
 ## 📱 Soporte de Navegadores
 
@@ -106,11 +130,7 @@ kidsvideos-app/
 
 ## 🎨 Personalización
 
-### Cambiar Iconos
-1. Reemplaza los archivos en la carpeta `icons/`
-2. Mantén los mismos nombres y tamaños
-
-### Modificar Colores
+### Cambiar Colores
 Edita las variables en `manifest.json`:
 ```json
 {
@@ -122,21 +142,49 @@ Edita las variables en `manifest.json`:
 ### Videos por Defecto
 Modifica la función `addExampleVideos()` en `index.html` para cambiar los videos de ejemplo.
 
+### Clave de Configuración
+- Clave por defecto: `1234`
+- Se puede cambiar desde la configuración
+- Se guarda en localStorage
+
 ## 🐛 Resolución de Problemas
 
 ### La app no se instala
-- ✅ Verifica que esté servida por HTTPS
-- ✅ Revisa que todos los iconos estén disponibles
+- ✅ Verifica que esté servida por HTTPS (GitHub Pages lo hace automáticamente)
 - ✅ Comprueba la consola del navegador para errores
 
 ### Videos no cargan
-- ✅ Para YouTube: Verifica que la URL sea válida
+- ✅ Para YouTube: Verifica que la URL sea válida y el video público
 - ✅ Para videos locales: Asegúrate de que el formato sea compatible (MP4, WebM)
 
 ### Service Worker no funciona
 - ✅ Verifica que el archivo `sw.js` esté en la raíz
 - ✅ Comprueba que esté servido por HTTPS en producción
 - ✅ Revisa la consola para errores de registro
+
+### Errores en GitHub Pages
+- ✅ Asegúrate de que `index.html` esté en la raíz
+- ✅ Verifica que todos los archivos estén commitados
+- ✅ Espera unos minutos para que se propaguen los cambios
+
+## 🚀 Comandos para Subir a GitHub
+
+```bash
+# 1. Inicializar repositorio (si es nuevo)
+git init
+git add .
+git commit -m "🎬 Initial commit: KidsVideo PWA"
+
+# 2. Conectar con GitHub
+git remote add origin https://github.com/tu-usuario/kidsvideos-app.git
+git branch -M main
+git push -u origin main
+
+# 3. Para actualizaciones futuras
+git add .
+git commit -m "✨ Descripción de cambios"
+git push
+```
 
 ## 🤝 Contribuir
 
@@ -156,8 +204,15 @@ Este proyecto está bajo la Licencia MIT - mira el archivo [LICENSE](LICENSE) pa
 - Funcionalidad PWA siguiendo las mejores prácticas de Google
 - Videos de ejemplo de dominio público
 
+## 📧 Soporte
+
+Si tienes problemas o sugerencias:
+- 🐛 [Reportar bug](../../issues)
+- 💡 [Sugerir mejora](../../issues)
+- 📖 [Ver documentación](../../wiki)
+
 ---
 
 ⭐ **¡Si te gusta este proyecto, dale una estrella en GitHub!**
 
-📧 **¿Preguntas o sugerencias?** Abre un [issue](../../issues) en GitHub.
+🌐 **Demo**: [https://tu-usuario.github.io/kidsvideos-app/](https://tu-usuario.github.io/kidsvideos-app/)
