@@ -101,6 +101,7 @@
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: none; /* Oculto por defecto, solo aparece en configuración */
         }
 
         .upload-section h2 {
@@ -362,25 +363,6 @@
             margin-bottom: 10px;
         }
 
-        .toggle-form {
-            background: linear-gradient(45deg, #45b7d1, #96ceb4);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 15px;
-            display: block;
-            width: calc(100% - 30px);
-            touch-action: manipulation;
-        }
-
-        .upload-section.collapsed {
-            display: none;
-        }
-
         .delete-btn {
             position: absolute;
             top: 10px;
@@ -567,9 +549,8 @@
         <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
     </div>
 
-    <button class="toggle-form" onclick="toggleForm()">➕ Agregar Nuevo Video</button>
-
-    <div class="upload-section collapsed" id="uploadSection">
+    <!-- Sección de upload movida a dentro del modal de configuración -->
+    <div class="upload-section" id="uploadSection">
         <h2>📽️ Agregar Nuevo Video</h2>
         <div class="input-group">
             <label for="videoType">Tipo de Video:</label>
@@ -626,8 +607,8 @@
 
     <div id="videosGrid" class="videos-grid">
         <div class="no-videos">
-            <h3>🎬 ¡Agrega tu primer video!</h3>
-            <p>Usa el botón de arriba para agregar videos de YouTube o subir videos locales</p>
+            <h3>🎬 ¡Bienvenido a KidsVideo!</h3>
+            <p>Puedes subir tus videos de YouTube o tus videos propios desde el engranaje ⚙️</p>
         </div>
     </div>
 
@@ -654,6 +635,17 @@
             </div>
 
             <div id="configContent" style="display: none;">
+                <!-- BOTÓN AGREGAR VIDEO MOVIDO AQUÍ -->
+                <div class="config-item">
+                    <div>
+                        <h4>➕ Agregar Videos</h4>
+                        <p>Subir videos de YouTube o archivos locales</p>
+                    </div>
+                    <button class="btn" onclick="showAddVideoForm()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                        📹 Nuevo Video
+                    </button>
+                </div>
+
                 <div class="config-section">
                     <div class="config-item">
                         <div>
@@ -754,6 +746,7 @@
             document.getElementById('configModal').style.display = 'flex';
             document.getElementById('passwordSection').style.display = 'block';
             document.getElementById('configContent').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'none'; // Ocultar formulario
             document.getElementById('configPassword').value = '';
             document.getElementById('configPassword').focus();
             updateVideoCount();
@@ -761,6 +754,7 @@
 
         function closeConfigModal() {
             document.getElementById('configModal').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'none'; // Ocultar formulario al cerrar
         }
 
         function validatePassword() {
@@ -773,6 +767,19 @@
                 showToast('❌ Clave incorrecta');
                 document.getElementById('configPassword').value = '';
             }
+        }
+
+        // NUEVA FUNCIÓN PARA MOSTRAR FORMULARIO DE AGREGAR VIDEO
+        function showAddVideoForm() {
+            document.getElementById('uploadSection').style.display = 'block';
+            // Limpiar formulario
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('videoDescription').value = '';
+            document.getElementById('videoFile').value = '';
+            document.getElementById('videoType').value = 'youtube';
+            document.getElementById('youtubeInput').style.display = 'block';
+            document.getElementById('localInput').style.display = 'none';
         }
 
         function updateVideoCount() {
@@ -822,20 +829,6 @@
             });
         });
 
-        // Toggle form visibility
-        function toggleForm() {
-            const section = document.getElementById('uploadSection');
-            const button = document.querySelector('.toggle-form');
-            
-            if (section.classList.contains('collapsed')) {
-                section.classList.remove('collapsed');
-                button.textContent = '➖ Ocultar Formulario';
-            } else {
-                section.classList.add('collapsed');
-                button.textContent = '➕ Agregar Nuevo Video';
-            }
-        }
-
         // Change video type
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('videoType').addEventListener('change', function() {
@@ -870,16 +863,3 @@
                 showToast('❌ Por favor, ingresa un título para el video');
                 return;
             }
-
-            let videoData = {
-                id: Date.now(),
-                title: title,
-                category: category,
-                description: description,
-                type: type
-            };
-
-            if (type === 'youtube') {
-                const youtubeUrl = document.getElementById('youtubeUrl').value;
-                if (!youtubeUrl) {
-                    showToast('❌ Por favor, ingresa una
