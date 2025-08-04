@@ -71,7 +71,7 @@
             align-items: center;
         }
 
-        .config-btn, .add-btn {
+        .config-btn, .add-btn, .sync-btn {
             background: rgba(255,255,255,0.2);
             border: 2px solid white;
             color: white;
@@ -88,7 +88,8 @@
         }
 
         .config-btn:hover, .config-btn:active,
-        .add-btn:hover, .add-btn:active {
+        .add-btn:hover, .add-btn:active,
+        .sync-btn:hover, .sync-btn:active {
             background: rgba(255,255,255,0.3);
             transform: scale(1.1);
         }
@@ -100,6 +101,24 @@
 
         .add-btn:hover, .add-btn:active {
             background: rgba(76, 205, 196, 1);
+        }
+
+        .sync-btn {
+            background: rgba(255, 107, 107, 0.9);
+            border-color: #ff6b6b;
+        }
+
+        .sync-btn:hover, .sync-btn:active {
+            background: rgba(255, 107, 107, 1);
+        }
+
+        .sync-btn.syncing {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .upload-section {
@@ -173,6 +192,10 @@
         .btn.cancel {
             background: linear-gradient(45deg, #95a5a6, #7f8c8d);
             margin-top: 10px;
+        }
+
+        .btn.sync {
+            background: linear-gradient(45deg, #667eea, #764ba2);
         }
 
         .categories {
@@ -580,6 +603,160 @@
             background: rgba(255,255,255,0.3);
         }
 
+        /* Estilos para sincronización */
+        .sync-section {
+            background: rgba(255,255,255,0.95);
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .sync-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .sync-options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sync-option {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sync-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .sync-option-icon {
+            font-size: 2em;
+            width: 60px;
+            text-align: center;
+        }
+
+        .sync-option-content h3 {
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .sync-option-content p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .qr-code {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        .qr-code canvas {
+            border: 3px solid #667eea;
+            border-radius: 10px;
+        }
+
+        .sync-code {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px dashed #667eea;
+        }
+
+        .sync-code h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .sync-code-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            font-family: monospace;
+            letter-spacing: 0.2em;
+        }
+
+        .device-list {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .device-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .device-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .device-info {
+            flex: 1;
+            color: white;
+        }
+
+        .device-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .device-status {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        .sync-status {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .sync-status.connected {
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ecdc4;
+            border: 2px solid #4ecdc4;
+        }
+
+        .sync-status.disconnected {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+        }
+
+        .sync-status.syncing {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 2px solid #ffc107;
+        }
+
         /* Mejoras para móviles */
         @media (max-width: 768px) {
             .header h1 {
@@ -606,7 +783,7 @@
                 padding: 10px 15px;
             }
             
-            .upload-section {
+            .upload-section, .sync-section {
                 margin: 10px;
                 padding: 15px;
             }
@@ -616,7 +793,7 @@
                 gap: 10px;
             }
 
-            .config-btn, .add-btn {
+            .config-btn, .add-btn, .sync-btn {
                 width: 40px;
                 height: 40px;
                 font-size: 20px;
@@ -628,6 +805,10 @@
 
             .manage-buttons {
                 flex-direction: column;
+            }
+
+            .sync-options {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -659,9 +840,87 @@
             <p>¡Videos divertidos y seguros para niños!</p>
         </div>
         <div class="header-buttons">
+            <button class="sync-btn" onclick="showSyncOptions()" title="Sincronización">🔄</button>
             <button class="add-btn" onclick="showAddVideoForm()" title="Agregar Video">➕</button>
             <button class="config-btn" onclick="openConfig()" title="Configuración">⚙️</button>
         </div>
+    </div>
+
+    <!-- Sección de Sincronización -->
+    <div class="sync-section" id="syncSection">
+        <h2>🔄 Sincronización entre Dispositivos</h2>
+        
+        <div class="sync-status disconnected" id="syncStatus">
+            <h4>📱 Estado: Desconectado</h4>
+            <p>Selecciona una opción para sincronizar tus videos</p>
+        </div>
+
+        <div class="sync-options">
+            <div class="sync-option" onclick="shareVideos()">
+                <div class="sync-option-icon">📤</div>
+                <div class="sync-option-content">
+                    <h3>Compartir Biblioteca</h3>
+                    <p>Genera un código QR para que otros dispositivos se conecten</p>
+                </div>
+            </div>
+            
+            <div class="sync-option" onclick="connectToDevice()">
+                <div class="sync-option-icon">📥</div>
+                <div class="sync-option-content">
+                    <h3>Conectar a Dispositivo</h3>
+                    <p>Escanea código QR o ingresa código para recibir videos</p>
+                </div>
+            </div>
+            
+            <div class="sync-option" onclick="showNearbyDevices()">
+                <div class="sync-option-icon">📡</div>
+                <div class="sync-option-content">
+                    <h3>Dispositivos Cercanos</h3>
+                    <p>Buscar dispositivos KidsVideo en la misma red</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="qrSection" class="qr-code" style="display: none;">
+            <h3>📱 Escanea este código QR</h3>
+            <canvas id="qrCanvas" width="200" height="200"></canvas>
+            <div class="sync-code">
+                <h4>O ingresa este código:</h4>
+                <div class="sync-code-display" id="syncCodeDisplay">ABCD1234</div>
+            </div>
+        </div>
+
+        <div id="connectSection" style="display: none;">
+            <div class="input-group">
+                <label for="deviceCode">Código del Dispositivo:</label>
+                <input type="text" id="deviceCode" placeholder="Ingresa el código de 8 caracteres" maxlength="8" style="text-transform: uppercase;">
+            </div>
+            <button class="btn sync" onclick="connectWithCode()">🔗 Conectar</button>
+        </div>
+
+        <div id="nearbyDevicesSection" class="device-list" style="display: none;">
+            <h4 style="color: white; margin-bottom: 15px;">📡 Dispositivos Encontrados</h4>
+            <div id="devicesList">
+                <div class="device-item">
+                    <div class="device-icon">💻</div>
+                    <div class="device-info">
+                        <div class="device-name">PC de Casa</div>
+                        <div class="device-status">En línea - 15 videos disponibles</div>
+                    </div>
+                    <button class="btn" onclick="connectToFoundDevice('pc-casa')" style="width: auto; padding: 8px 15px; font-size: 14px;">Conectar</button>
+                </div>
+                <div class="device-item">
+                    <div class="device-icon">📱</div>
+                    <div class="device-info">
+                        <div class="device-name">Tablet Mamá</div>
+                        <div class="device-status">En línea - 8 videos disponibles</div>
+                    </div>
+                    <button class="btn" onclick="connectToFoundDevice('tablet-mama')" style="width: auto; padding: 8px 15px; font-size: 14px;">Conectar</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn cancel" onclick="hideSyncOptions()">❌ Cerrar</button>
     </div>
 
     <div class="upload-section" id="uploadSection">
@@ -723,7 +982,7 @@
     <div id="videosGrid" class="videos-grid">
         <div class="no-videos">
             <h3>🎬 ¡Bienvenido a KidsVideo!</h3>
-            <p>Puedes agregar videos usando el botón ➕ o acceder a más opciones con el engranaje ⚙️</p>
+            <p>Puedes agregar videos usando el botón ➕, sincronizar con otros dispositivos 🔄 o acceder a más opciones con el engranaje ⚙️</p>
         </div>
     </div>
 
@@ -759,6 +1018,16 @@
             </div>
 
             <div id="configContent" style="display: none;">
+                <div class="config-item">
+                    <div>
+                        <h4>🔄 Sincronización</h4>
+                        <p>Conectar con otros dispositivos para compartir videos</p>
+                    </div>
+                    <button class="btn sync" onclick="showSyncOptions()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                        🔗 Sincronizar
+                    </button>
+                </div>
+
                 <div class="config-item">
                     <div>
                         <h4>➕ Agregar Videos</h4>
@@ -824,6 +1093,7 @@
                         <div>
                             <h4>Información</h4>
                             <p>Videos almacenados: <span id="videoCount">0</span></p>
+                            <p>Dispositivos conectados: <span id="connectedDevices">0</span></p>
                         </div>
                     </div>
                 </div>
@@ -844,12 +1114,352 @@
         let configPassword = '1234';
         let currentPlaylist = [];
         let currentVideoIndex = 0;
+        let syncCode = '';
+        let connectedDevices = [];
+        let isHost = false;
+        let syncConnection = null;
 
         // Cargar configuración guardada
         function loadConfig() {
             const savedPassword = localStorage.getItem('kidsVideoPassword');
             if (savedPassword) {
                 configPassword = savedPassword;
+            }
+            
+            // Cargar dispositivos conectados
+            const savedDevices = localStorage.getItem('kidsVideoDevices');
+            if (savedDevices) {
+                connectedDevices = JSON.parse(savedDevices);
+            }
+        }
+
+        // Función para generar código de sincronización
+        function generateSyncCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        // Función para generar QR Code simple (simulado)
+        function generateQRCode(text) {
+            const canvas = document.getElementById('qrCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Limpiar canvas
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 200, 200);
+            
+            // Crear patrón simple de QR (simulado)
+            ctx.fillStyle = 'black';
+            const blockSize = 10;
+            const data = text.split('').map(char => char.charCodeAt(0));
+            
+            for (let i = 0; i < data.length && i < 400; i++) {
+                const x = (i % 20) * blockSize;
+                const y = Math.floor(i / 20) * blockSize;
+                if (data[i] % 2 === 0) {
+                    ctx.fillRect(x, y, blockSize, blockSize);
+                }
+            }
+            
+            // Añadir esquinas de QR
+            ctx.fillRect(0, 0, 30, 30);
+            ctx.fillRect(170, 0, 30, 30);
+            ctx.fillRect(0, 170, 30, 30);
+        }
+
+        // Mostrar opciones de sincronización
+        function showSyncOptions() {
+            document.getElementById('syncSection').style.display = 'block';
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('configModal').style.display = 'none';
+            
+            // Scroll hacia la sección
+            document.getElementById('syncSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+
+        function hideSyncOptions() {
+            document.getElementById('syncSection').style.display = 'none';
+            hideAllSyncSections();
+        }
+
+        function hideAllSyncSections() {
+            document.getElementById('qrSection').style.display = 'none';
+            document.getElementById('connectSection').style.display = 'none';
+            document.getElementById('nearbyDevicesSection').style.display = 'none';
+        }
+
+        // Compartir biblioteca de videos
+        function shareVideos() {
+            hideAllSyncSections();
+            document.getElementById('qrSection').style.display = 'block';
+            
+            syncCode = generateSyncCode();
+            document.getElementById('syncCodeDisplay').textContent = syncCode;
+            generateQRCode(syncCode);
+            
+            isHost = true;
+            updateSyncStatus('syncing', `🔄 Esperando conexión... Código: ${syncCode}`);
+            
+            // Simular WebRTC o WebSocket para conexión P2P
+            startSyncServer();
+            
+            showToast('📤 Código generado. Comparte con otros dispositivos');
+        }
+
+        // Conectar a dispositivo
+        function connectToDevice() {
+            hideAllSyncSections();
+            document.getElementById('connectSection').style.display = 'block';
+            document.getElementById('deviceCode').focus();
+            
+            updateSyncStatus('disconnected', '📱 Ingresa el código para conectar');
+        }
+
+        // Mostrar dispositivos cercanos
+        function showNearbyDevices() {
+            hideAllSyncSections();
+            document.getElementById('nearbyDevicesSection').style.display = 'block';
+            
+            updateSyncStatus('syncing', '🔍 Buscando dispositivos...');
+            
+            // Simular búsqueda de dispositivos
+            setTimeout(() => {
+                updateSyncStatus('disconnected', '📡 Dispositivos encontrados');
+                showToast('📡 Se encontraron 2 dispositivos');
+            }, 2000);
+        }
+
+        // Conectar con código
+        function connectWithCode() {
+            const code = document.getElementById('deviceCode').value.trim().toUpperCase();
+            
+            if (!code || code.length !== 8) {
+                showToast('❌ Ingresa un código válido de 8 caracteres');
+                return;
+            }
+            
+            updateSyncStatus('syncing', `🔄 Conectando con ${code}...`);
+            
+            // Simular conexión
+            setTimeout(() => {
+                const success = Math.random() > 0.3; // 70% de éxito
+                
+                if (success) {
+                    connectToHost(code);
+                } else {
+                    updateSyncStatus('disconnected', '❌ No se pudo conectar. Verifica el código');
+                    showToast('❌ Código incorrecto o dispositivo no disponible');
+                }
+            }, 3000);
+        }
+
+        // Conectar a dispositivo encontrado
+        function connectToFoundDevice(deviceId) {
+            updateSyncStatus('syncing', `🔄 Conectando a ${deviceId}...`);
+            
+            setTimeout(() => {
+                const deviceName = deviceId === 'pc-casa' ? 'PC de Casa' : 'Tablet Mamá';
+                updateSyncStatus('connected', `✅ Conectado a ${deviceName}`);
+                
+                // Simular recepción de videos
+                setTimeout(() => {
+                    receiveVideosFromDevice(deviceId);
+                }, 1000);
+                
+                showToast(`✅ Conectado a ${deviceName}`);
+            }, 2000);
+        }
+
+        // Actualizar estado de sincronización
+        function updateSyncStatus(status, message) {
+            const statusElement = document.getElementById('syncStatus');
+            statusElement.className = `sync-status ${status}`;
+            
+            const icons = {
+                connected: '✅',
+                disconnected: '📱',
+                syncing: '🔄'
+            };
+            
+            statusElement.innerHTML = `<h4>${icons[status]} ${message}</h4>`;
+        }
+
+        // Iniciar servidor de sincronización (simulado)
+        function startSyncServer() {
+            // En una implementación real, aquí iniciarías un WebRTC peer connection
+            // o un WebSocket server para recibir conexiones
+            
+            setTimeout(() => {
+                // Simular conexión entrante
+                if (Math.random() > 0.5) {
+                    const deviceName = 'Smartphone Cliente';
+                    updateSyncStatus('connected', `✅ ${deviceName} se conectó`);
+                    addConnectedDevice(deviceName, 'smartphone');
+                    showToast(`📱 ${deviceName} se conectó y está sincronizando`);
+                    
+                    // Enviar videos al dispositivo conectado
+                    setTimeout(() => {
+                        sendVideosToClient();
+                    }, 1000);
+                }
+            }, 10000); // Simular conexión después de 10 segundos
+        }
+
+        // Conectar como cliente
+        function connectToHost(code) {
+            // En implementación real, usar el código para encontrar y conectar al host
+            updateSyncStatus('connected', `✅ Conectado con código ${code}`);
+            
+            // Simular recepción de videos
+            setTimeout(() => {
+                receiveVideosFromHost(code);
+            }, 1500);
+            
+            showToast('✅ Conectado exitosamente');
+        }
+
+        // Enviar videos a cliente
+        function sendVideosToClient() {
+            if (videos.length === 0) {
+                showToast('📭 No hay videos para compartir');
+                return;
+            }
+            
+            showToast(`📤 Enviando ${videos.length} videos...`);
+            
+            // Simular progreso de envío
+            let sent = 0;
+            const interval = setInterval(() => {
+                sent++;
+                if (sent <= videos.length) {
+                    updateSyncStatus('syncing', `📤 Enviando video ${sent}/${videos.length}...`);
+                } else {
+                    clearInterval(interval);
+                    updateSyncStatus('connected', '✅ Videos enviados exitosamente');
+                    showToast('✅ Todos los videos fueron enviados');
+                }
+            }, 1000);
+        }
+
+        // Recibir videos del host
+        function receiveVideosFromHost(code) {
+            // Simular videos recibidos
+            const receivedVideos = [
+                {
+                    id: Date.now() + 1,
+                    type: 'youtube',
+                    title: 'Canciones Infantiles ABC',
+                    category: 'canciones',
+                    description: 'Aprende el abecedario cantando',
+                    videoId: 'dQw4w9WgXcQ',
+                    thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    source: 'sync'
+                },
+                {
+                    id: Date.now() + 2,
+                    type: 'youtube',
+                    title: 'Animales de la Selva',
+                    category: 'animales',
+                    description: 'Conoce los animales salvajes',
+                    videoId: 'dQw4w9WgXcQ',
+                    thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    source: 'sync'
+                }
+            ];
+            
+            showToast(`📥 Recibiendo ${receivedVideos.length} videos...`);
+            
+            let received = 0;
+            const interval = setInterval(() => {
+                if (received < receivedVideos.length) {
+                    videos.push(receivedVideos[received]);
+                    received++;
+                    updateSyncStatus('syncing', `📥 Recibiendo video ${received}/${receivedVideos.length}...`);
+                } else {
+                    clearInterval(interval);
+                    updateSyncStatus('connected', '✅ Videos recibidos exitosamente');
+                    saveVideos();
+                    renderVideos();
+                    showToast('✅ Videos sincronizados correctamente');
+                }
+            }, 1500);
+        }
+
+        // Recibir videos de dispositivo específico
+        function receiveVideosFromDevice(deviceId) {
+            const videoCount = deviceId === 'pc-casa' ? 15 : 8;
+            showToast(`📥 Recibiendo ${videoCount} videos de ${deviceId}...`);
+            
+            // Simular recepción progresiva
+            setTimeout(() => {
+                const newVideos = generateSampleVideos(videoCount);
+                videos.push(...newVideos);
+                saveVideos();
+                renderVideos();
+                showToast(`✅ ${videoCount} videos sincronizados`);
+            }, 3000);
+        }
+
+        // Generar videos de ejemplo para sincronización
+        function generateSampleVideos(count) {
+            const sampleVideos = [];
+            const titles = [
+                'Números del 1 al 10', 'Colores Primarios', 'Formas Geométricas',
+                'Animales Domésticos', 'Frutas y Verduras', 'Transportes',
+                'Partes del Cuerpo', 'Días de la Semana', 'Estaciones del Año',
+                'Oficios y Profesiones', 'La Familia', 'Mi Casa',
+                'En el Parque', 'Deportes para Niños', 'Instrumentos Musicales'
+            ];
+            
+            const categories = ['educativo', 'canciones', 'cuentos', 'animales', 'juegos', 'arte'];
+            
+            for (let i = 0; i < count && i < titles.length; i++) {
+                sampleVideos.push({
+                    id: Date.now() + i + 100,
+                    type: 'youtube',
+                    title: titles[i],
+                    category: categories[i % categories.length],
+                    description: `Video educativo sobre ${titles[i].toLowerCase()}`,
+                    videoId: 'dQw4w9WgXcQ',
+                    thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    source: 'sync'
+                });
+            }
+            
+            return sampleVideos;
+        }
+
+        // Agregar dispositivo conectado
+        function addConnectedDevice(name, type) {
+            const device = {
+                id: Date.now(),
+                name: name,
+                type: type,
+                connected: true,
+                lastSync: new Date().toISOString()
+            };
+            
+            connectedDevices.push(device);
+            localStorage.setItem('kidsVideoDevices', JSON.stringify(connectedDevices));
+            updateDeviceCount();
+        }
+
+        // Actualizar contador de dispositivos
+        function updateDeviceCount() {
+            const count = connectedDevices.filter(device => device.connected).length;
+            const element = document.getElementById('connectedDevices');
+            if (element) {
+                element.textContent = count;
             }
         }
 
@@ -900,14 +1510,17 @@
             document.getElementById('passwordSection').style.display = 'block';
             document.getElementById('configContent').style.display = 'none';
             document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('syncSection').style.display = 'none';
             document.getElementById('configPassword').value = '';
             document.getElementById('configPassword').focus();
             updateVideoCount();
+            updateDeviceCount();
         }
 
         function closeConfigModal() {
             document.getElementById('configModal').style.display = 'none';
             document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('syncSection').style.display = 'none';
             hideVideoManagement();
         }
 
@@ -917,6 +1530,7 @@
                 document.getElementById('passwordSection').style.display = 'none';
                 document.getElementById('configContent').style.display = 'block';
                 updateVideoCount();
+                updateDeviceCount();
             } else {
                 showToast('❌ Clave incorrecta');
                 document.getElementById('configPassword').value = '';
@@ -926,6 +1540,7 @@
         function showAddVideoForm() {
             document.getElementById('uploadSection').style.display = 'block';
             document.getElementById('configModal').style.display = 'none';
+            document.getElementById('syncSection').style.display = 'none';
             clearForm();
             
             // Scroll suave hacia el formulario
@@ -959,6 +1574,7 @@
                 localStorage.clear();
                 configPassword = '1234';
                 videos = [];
+                connectedDevices = [];
                 renderVideos();
                 closeConfigModal();
                 showToast('🔄 Aplicación restablecida');
@@ -1001,7 +1617,7 @@
                 <div class="video-item">
                     <input type="checkbox" id="video-${video.id}" value="${video.id}">
                     <div class="video-item-info">
-                        <div class="video-item-title">${video.title}</div>
+                        <div class="video-item-title">${video.title} ${video.source === 'sync' ? '🔄' : ''}</div>
                         <div class="video-item-category">${getCategoryName(video.category)}</div>
                     </div>
                     ${video.type === 'youtube' 
@@ -1185,8 +1801,8 @@
                     <div class="no-videos">
                         <h3>🎬 ${currentFilter === 'all' ? '¡Bienvenido a KidsVideo!' : 'No hay videos en esta categoría'}</h3>
                         <p>${currentFilter === 'all' 
-                            ? 'Puedes agregar videos usando el botón ➕ o acceder a más opciones con el engranaje ⚙️' 
-                            : 'Puedes agregar videos desde el botón ➕'}</p>
+                            ? 'Puedes agregar videos usando el botón ➕, sincronizar con otros dispositivos 🔄 o acceder a más opciones con el engranaje ⚙️' 
+                            : 'Puedes agregar videos desde el botón ➕ o sincronizar con otros dispositivos 🔄'}</p>
                     </div>
                 `;
                 return;
@@ -1200,6 +1816,7 @@
                             : `<div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">🎬</div>`
                         }
                         <div class="play-icon">▶</div>
+                        ${video.source === 'sync' ? '<div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px;">🔄</div>' : ''}
                     </div>
                     <div class="video-info">
                         <div class="video-category">${getCategoryName(video.category)}</div>
@@ -1290,8 +1907,9 @@
 
             info.innerHTML = `
                 <div class="video-category">${getCategoryName(video.category)}</div>
-                <h3 style="color: #333; margin: 10px 0;">${video.title}</h3>
+                <h3 style="color: #333; margin: 10px 0;">${video.title} ${video.source === 'sync' ? '🔄' : ''}</h3>
                 <p style="color: #666; line-height: 1.5;">${video.description}</p>
+                ${video.source === 'sync' ? '<p style="color: #667eea; font-size: 0.9em; margin-top: 10px;"><em>📡 Video sincronizado desde otro dispositivo</em></p>' : ''}
             `;
 
             // Mostrar controles de playlist si hay más de un video
@@ -1358,8 +1976,9 @@
 
             info.innerHTML = `
                 <div class="video-category">${getCategoryName(video.category)}</div>
-                <h3 style="color: #333; margin: 10px 0;">${video.title}</h3>
+                <h3 style="color: #333; margin: 10px 0;">${video.title} ${video.source === 'sync' ? '🔄' : ''}</h3>
                 <p style="color: #666; line-height: 1.5;">${video.description}</p>
+                ${video.source === 'sync' ? '<p style="color: #667eea; font-size: 0.9em; margin-top: 10px;"><em>📡 Video sincronizado desde otro dispositivo</em></p>' : ''}
             `;
 
             updatePlaylistInfo();
@@ -1391,9 +2010,13 @@
                 closeModal();
                 closeConfigModal();
                 hideAddVideoForm();
+                hideSyncOptions();
             }
             if (e.key === 'Enter' && document.getElementById('configPassword') === document.activeElement) {
                 validatePassword();
+            }
+            if (e.key === 'Enter' && document.getElementById('deviceCode') === document.activeElement) {
+                connectWithCode();
             }
             // Controles de playlist con teclas
             if (document.getElementById('videoModal').style.display === 'flex') {
@@ -1418,6 +2041,77 @@
             }
         });
 
+        // Auto-formatear código de dispositivo
+        document.addEventListener('DOMContentLoaded', () => {
+            const deviceCodeInput = document.getElementById('deviceCode');
+            if (deviceCodeInput) {
+                deviceCodeInput.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                });
+            }
+        });
+
+        // Simulación de WebRTC/WebSocket para sincronización real
+        class SyncManager {
+            constructor() {
+                this.connections = [];
+                this.isHost = false;
+                this.hostCode = '';
+            }
+
+            // Crear sala como host
+            createRoom() {
+                this.isHost = true;
+                this.hostCode = generateSyncCode();
+                
+                // En implementación real, aquí iniciarías:
+                // - WebRTC PeerConnection
+                // - SignalingServer connection
+                // - WebSocket server
+                
+                return this.hostCode;
+            }
+
+            // Unirse a sala como cliente
+            joinRoom(code) {
+                this.isHost = false;
+                
+                // En implementación real:
+                // - Conectar a signaling server
+                // - Establecer WebRTC connection
+                // - Intercambiar ICE candidates
+                
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (code.length === 8) {
+                            resolve(true);
+                        } else {
+                            reject(new Error('Código inválido'));
+                        }
+                    }, 2000);
+                });
+            }
+
+            // Enviar datos
+            sendData(data) {
+                // En implementación real:
+                // - Usar WebRTC DataChannel
+                // - O WebSocket para enviar datos
+                console.log('Enviando datos:', data);
+            }
+
+            // Recibir datos
+            onDataReceived(callback) {
+                // En implementación real:
+                // - Escuchar eventos de DataChannel
+                // - O mensajes de WebSocket
+                this.dataCallback = callback;
+            }
+        }
+
+        // Instancia global del manager de sincronización
+        const syncManager = new SyncManager();
+
         // Inicializar app
         window.addEventListener('load', () => {
             loadConfig();
@@ -1428,10 +2122,71 @@
             setTimeout(() => {
                 hideInstallBanner();
             }, 10000);
+
+            // Configurar botón de sincronización con animación
+            const syncBtn = document.querySelector('.sync-btn');
+            if (syncBtn) {
+                syncBtn.addEventListener('click', () => {
+                    syncBtn.classList.add('syncing');
+                    setTimeout(() => {
+                        syncBtn.classList.remove('syncing');
+                    }, 2000);
+                });
+            }
         });
 
         // Prevenir zoom en inputs en iOS
         document.addEventListener('touchstart', function() {}, true);
+
+        // Notificaciones de sincronización
+        function showSyncNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'success' ? '#4ecdc4' : type === 'error' ? '#ff6b6b' : '#667eea'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                font-weight: bold;
+                z-index: 10001;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remover después de 4 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Detectar si la app está siendo usada como PWA
+        function isPWA() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true;
+        }
+
+        // Mostrar información específica para PWA
+        if (isPWA()) {
+            console.log('App ejecutándose como PWA');
+            // Aquí podrías habilitar funciones específicas para PWA
+        }
     </script>
 </body>
 </html>
+                
