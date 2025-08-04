@@ -375,28 +375,6 @@
             margin-bottom: 10px;
         }
 
-        .delete-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 107, 107, 0.9);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            display: none;
-            touch-action: manipulation;
-            z-index: 10;
-        }
-
-        .video-card:hover .delete-btn {
-            display: block;
-        }
-
         .config-section {
             padding: 20px;
         }
@@ -486,6 +464,122 @@
             touch-action: manipulation;
         }
 
+        /* Estilos para gestión de videos */
+        .video-management {
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .video-item input[type="checkbox"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .video-item-info {
+            flex: 1;
+            color: white;
+        }
+
+        .video-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .video-item-category {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .video-item img {
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        .manage-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .manage-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .select-all-btn {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .delete-selected-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .playlist-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .playlist-info {
+            font-size: 14px;
+        }
+
+        .playlist-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .playlist-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .playlist-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         /* Mejoras para móviles */
         @media (max-width: 768px) {
             .header h1 {
@@ -530,6 +624,10 @@
 
             .header-buttons {
                 gap: 15px;
+            }
+
+            .manage-buttons {
+                flex-direction: column;
             }
         }
 
@@ -635,6 +733,15 @@
             <button class="close-modal" onclick="closeModal()">×</button>
             <div id="videoPlayer" class="video-player"></div>
             <div id="videoModalInfo" style="margin-top: 15px;"></div>
+            <div id="playlistControls" class="playlist-controls" style="display: none;">
+                <div class="playlist-info">
+                    <span id="currentVideoIndex">1</span> de <span id="totalVideos">1</span>
+                </div>
+                <div class="playlist-buttons">
+                    <button class="playlist-btn" onclick="playPrevious()">⏮️ Anterior</button>
+                    <button class="playlist-btn" onclick="playNext()">Siguiente ⏭️</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -662,10 +769,30 @@
                     </button>
                 </div>
 
+                <div class="config-item">
+                    <div>
+                        <h4>🗑️ Gestionar Videos</h4>
+                        <p>Seleccionar y eliminar videos específicos</p>
+                    </div>
+                    <button class="btn" onclick="showVideoManagement()" style="width: auto; padding: 10px 20px; font-size: 14px;">
+                        📝 Gestionar
+                    </button>
+                </div>
+
+                <div id="videoManagementSection" style="display: none;">
+                    <h3 style="color: white; margin-bottom: 15px;">📝 Gestión de Videos</h3>
+                    <div id="videoList" class="video-management"></div>
+                    <div class="manage-buttons">
+                        <button class="select-all-btn" onclick="selectAllVideos()">✅ Seleccionar Todos</button>
+                        <button class="delete-selected-btn" onclick="deleteSelectedVideos()">🗑️ Eliminar Seleccionados</button>
+                        <button class="btn cancel" onclick="hideVideoManagement()" style="width: auto; padding: 10px 20px; font-size: 14px;">❌ Cerrar</button>
+                    </div>
+                </div>
+
                 <div class="config-section">
                     <div class="config-item">
                         <div>
-                            <h4>Gestión de Videos</h4>
+                            <h4>Gestión General</h4>
                             <p>Eliminar todos los videos almacenados</p>
                         </div>
                         <button class="btn danger" onclick="clearAllVideos()" style="width: auto; padding: 10px 20px; font-size: 14px;">
@@ -715,6 +842,8 @@
         let currentFilter = 'all';
         let deferredPrompt;
         let configPassword = '1234';
+        let currentPlaylist = [];
+        let currentVideoIndex = 0;
 
         // Cargar configuración guardada
         function loadConfig() {
@@ -779,6 +908,7 @@
         function closeConfigModal() {
             document.getElementById('configModal').style.display = 'none';
             document.getElementById('uploadSection').style.display = 'none';
+            hideVideoManagement();
         }
 
         function validatePassword() {
@@ -845,6 +975,68 @@
                 } else {
                     showToast('❌ La clave debe tener exactamente 4 dígitos');
                 }
+            }
+        }
+
+        // Funciones de gestión de videos
+        function showVideoManagement() {
+            const section = document.getElementById('videoManagementSection');
+            section.style.display = 'block';
+            renderVideoList();
+        }
+
+        function hideVideoManagement() {
+            document.getElementById('videoManagementSection').style.display = 'none';
+        }
+
+        function renderVideoList() {
+            const videoList = document.getElementById('videoList');
+            
+            if (videos.length === 0) {
+                videoList.innerHTML = '<p style="color: white; text-align: center; padding: 20px;">No hay videos para gestionar</p>';
+                return;
+            }
+
+            videoList.innerHTML = videos.map(video => `
+                <div class="video-item">
+                    <input type="checkbox" id="video-${video.id}" value="${video.id}">
+                    <div class="video-item-info">
+                        <div class="video-item-title">${video.title}</div>
+                        <div class="video-item-category">${getCategoryName(video.category)}</div>
+                    </div>
+                    ${video.type === 'youtube' 
+                        ? `<img src="${video.thumbnail}" alt="${video.title}" loading="lazy">` 
+                        : `<div style="width: 60px; height: 40px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">🎬</div>`
+                    }
+                </div>
+            `).join('');
+        }
+
+        function selectAllVideos() {
+            const checkboxes = document.querySelectorAll('#videoList input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+            });
+        }
+
+        function deleteSelectedVideos() {
+            const selectedVideos = Array.from(document.querySelectorAll('#videoList input[type="checkbox"]:checked'))
+                .map(cb => parseInt(cb.value));
+            
+            if (selectedVideos.length === 0) {
+                showToast('❌ No hay videos seleccionados');
+                return;
+            }
+
+            if (confirm(`¿Estás seguro de que quieres eliminar ${selectedVideos.length} video(s)?`)) {
+                videos = videos.filter(video => !selectedVideos.includes(video.id));
+                saveVideos();
+                renderVideos();
+                renderVideoList();
+                updateVideoCount();
+                showToast(`🗑️ ${selectedVideos.length} video(s) eliminado(s)`);
             }
         }
 
@@ -1002,7 +1194,6 @@
 
             grid.innerHTML = filteredVideos.map(video => `
                 <div class="video-card" onclick="playVideo(${video.id})">
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVideo(${video.id})" title="Eliminar video">×</button>
                     <div class="video-thumbnail">
                         ${video.type === 'youtube' 
                             ? `<img src="${video.thumbnail}" alt="${video.title}" loading="lazy">` 
@@ -1047,21 +1238,50 @@
             const video = videos.find(v => v.id === videoId);
             if (!video) return;
 
+            // Preparar playlist basada en el filtro actual
+            currentPlaylist = currentFilter === 'all' 
+                ? videos 
+                : videos.filter(v => v.category === currentFilter);
+            
+            currentVideoIndex = currentPlaylist.findIndex(v => v.id === videoId);
+
             const modal = document.getElementById('videoModal');
             const player = document.getElementById('videoPlayer');
             const info = document.getElementById('videoModalInfo');
+            const playlistControls = document.getElementById('playlistControls');
 
             if (video.type === 'youtube') {
+                // Parámetros para eliminar controles y recomendaciones de YouTube
+                const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0&showinfo=0&controls=1&modestbranding=1&iv_load_policy=3&disablekb=1&fs=1&cc_load_policy=0&playsinline=1`;
+                
                 player.innerHTML = `
-                    <iframe src="https://www.youtube.com/embed/${video.videoId}?autoplay=1" 
+                    <iframe src="${embedUrl}" 
                             frameborder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                     </iframe>
                 `;
+                
+                // Escuchar cuando termine el video para reproducir el siguiente
+                setTimeout(() => {
+                    const iframe = player.querySelector('iframe');
+                    if (iframe) {
+                        iframe.onload = () => {
+                            // Configurar auto-reproducción del siguiente video
+                            setTimeout(() => {
+                                if (currentVideoIndex < currentPlaylist.length - 1) {
+                                    // Auto-reproducir siguiente video después de que termine
+                                    // Nota: YouTube no permite detectar el final del video desde iframe por políticas CORS
+                                    // Pero el usuario puede usar los controles manuales
+                                }
+                            }, 5000);
+                        };
+                    }
+                }, 100);
+                
             } else if (video.type === 'local' && video.videoUrl) {
                 player.innerHTML = `
-                    <video controls autoplay>
+                    <video controls autoplay onended="playNext()">
                         <source src="${video.videoUrl}" type="video/mp4">
                         Tu navegador no soporta la reproducción de video.
                     </video>
@@ -1074,7 +1294,75 @@
                 <p style="color: #666; line-height: 1.5;">${video.description}</p>
             `;
 
+            // Mostrar controles de playlist si hay más de un video
+            if (currentPlaylist.length > 1) {
+                playlistControls.style.display = 'flex';
+                updatePlaylistInfo();
+            } else {
+                playlistControls.style.display = 'none';
+            }
+
             modal.style.display = 'flex';
+        }
+
+        function updatePlaylistInfo() {
+            document.getElementById('currentVideoIndex').textContent = currentVideoIndex + 1;
+            document.getElementById('totalVideos').textContent = currentPlaylist.length;
+        }
+
+        function playNext() {
+            if (currentVideoIndex < currentPlaylist.length - 1) {
+                currentVideoIndex++;
+                const nextVideo = currentPlaylist[currentVideoIndex];
+                playVideoFromPlaylist(nextVideo.id);
+            } else {
+                showToast('🎉 ¡Has llegado al final de la lista!');
+            }
+        }
+
+        function playPrevious() {
+            if (currentVideoIndex > 0) {
+                currentVideoIndex--;
+                const prevVideo = currentPlaylist[currentVideoIndex];
+                playVideoFromPlaylist(prevVideo.id);
+            } else {
+                showToast('📍 Este es el primer video de la lista');
+            }
+        }
+
+        function playVideoFromPlaylist(videoId) {
+            const video = currentPlaylist.find(v => v.id === videoId);
+            if (!video) return;
+
+            const player = document.getElementById('videoPlayer');
+            const info = document.getElementById('videoModalInfo');
+
+            if (video.type === 'youtube') {
+                const embedUrl = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0&showinfo=0&controls=1&modestbranding=1&iv_load_policy=3&disablekb=1&fs=1&cc_load_policy=0&playsinline=1`;
+                
+                player.innerHTML = `
+                    <iframe src="${embedUrl}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                `;
+            } else if (video.type === 'local' && video.videoUrl) {
+                player.innerHTML = `
+                    <video controls autoplay onended="playNext()">
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        Tu navegador no soporta la reproducción de video.
+                    </video>
+                `;
+            }
+
+            info.innerHTML = `
+                <div class="video-category">${getCategoryName(video.category)}</div>
+                <h3 style="color: #333; margin: 10px 0;">${video.title}</h3>
+                <p style="color: #666; line-height: 1.5;">${video.description}</p>
+            `;
+
+            updatePlaylistInfo();
         }
 
         function closeModal() {
@@ -1082,16 +1370,8 @@
             const player = document.getElementById('videoPlayer');
             modal.style.display = 'none';
             player.innerHTML = '';
-        }
-
-        function deleteVideo(videoId) {
-            if (confirm('¿Estás seguro de que quieres eliminar este video?')) {
-                videos = videos.filter(video => video.id !== videoId);
-                saveVideos();
-                renderVideos();
-                updateVideoCount();
-                showToast('🗑️ Video eliminado');
-            }
+            currentPlaylist = [];
+            currentVideoIndex = 0;
         }
 
         function showToast(message) {
@@ -1114,6 +1394,14 @@
             }
             if (e.key === 'Enter' && document.getElementById('configPassword') === document.activeElement) {
                 validatePassword();
+            }
+            // Controles de playlist con teclas
+            if (document.getElementById('videoModal').style.display === 'flex') {
+                if (e.key === 'ArrowRight') {
+                    playNext();
+                } else if (e.key === 'ArrowLeft') {
+                    playPrevious();
+                }
             }
         });
 
