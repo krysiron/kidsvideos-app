@@ -21,7 +21,240 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; 
+/* Optimización para modo horizontal (landscape) */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    
+    /* Header más compacto en horizontal */
+    .header {
+        padding: 10px 15px;
+        min-height: unset;
+    }
+    
+    .header h1 {
+        font-size: 1.4em;
+        margin-bottom: 2px;
+    }
+    
+    .header p {
+        font-size: 0.8em;
+        margin: 0;
+    }
+    
+    .header-buttons {
+        gap: 8px;
+    }
+    
+    .config-btn, .add-btn, .sync-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+    
+    /* Categorías más compactas */
+    .categories {
+        margin: 8px 10px;
+        gap: 6px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 5px;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE y Edge */
+    }
+    
+    .categories::-webkit-scrollbar {
+        display: none; /* Chrome, Safari y Opera */
+    }
+    
+    .category-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Grid de videos optimizado para horizontal */
+    .videos-grid {
+        padding: 8px;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+    
+    /* Cards de video más compactas */
+    .video-card {
+        border-radius: 12px;
+    }
+    
+    .video-thumbnail {
+        height: 130px;
+    }
+    
+    .video-info {
+        padding: 10px;
+    }
+    
+    .video-title {
+        font-size: 14px;
+        line-height: 1.2;
+        margin-bottom: 5px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .video-category {
+        font-size: 10px;
+        padding: 3px 8px;
+        margin-bottom: 5px;
+    }
+    
+    .video-description {
+        font-size: 11px;
+        line-height: 1.3;
+        -webkit-line-clamp: 1;
+    }
+    
+    /* Mensaje de bienvenida más compacto */
+    .no-videos {
+        padding: 20px 15px;
+        grid-column: 1/-1;
+    }
+    
+    .no-videos h3 {
+        font-size: 1.2em;
+        margin-bottom: 8px;
+    }
+    
+    .no-videos p {
+        font-size: 14px;
+    }
+    
+    /* Modal optimizado para horizontal */
+    .modal-content {
+        max-width: 90vw;
+        max-height: 85vh;
+        margin: 20px;
+    }
+    
+    .video-player {
+        height: 250px;
+    }
+    
+    /* Ocultar elementos innecesarios en horizontal */
+    .upload-section,
+    .sync-section {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* Para pantallas muy pequeñas en horizontal */
+@media screen and (orientation: landscape) and (max-height: 450px) {
+    
+    .header {
+        padding: 8px 10px;
+    }
+    
+    .header h1 {
+        font-size: 1.2em;
+    }
+    
+    .header p {
+        display: none; /* Ocultar subtítulo en pantallas muy pequeñas */
+    }
+    
+    .categories {
+        margin: 5px 8px;
+    }
+    
+    .category-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .videos-grid {
+        padding: 5px;
+        gap: 8px;
+        max-height: calc(100vh - 80px);
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .video-thumbnail {
+        height: 100px;
+    }
+    
+    .video-info {
+        padding: 8px;
+    }
+    
+    .video-title {
+        font-size: 13px;
+        -webkit-line-clamp: 1;
+    }
+    
+    .video-description {
+        display: none; /* Ocultar descripción en pantallas muy pequeñas */
+    }
+}
+
+/* Alternativa: Header sticky que se oculta al hacer scroll hacia abajo */
+@media screen and (orientation: landscape) {
+    .header {
+        position: sticky;
+        top: 0;
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+    
+    /* Clase para ocultar header al hacer scroll */
+    .header.hidden {
+        transform: translateY(-100%);
+    }
+    
+    /* Asegurar que el contenido no se sobreponga */
+    body {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Mejoras adicionales para el scroll horizontal de categorías */
+.categories {
+    position: relative;
+}
+
+.categories::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to left, rgba(102, 126, 234, 1), transparent);
+    pointer-events: none;
+}
+
+/* Indicador visual de scroll para categorías */
+@media screen and (orientation: landscape) {
+    .categories {
+        position: relative;
+    }
+    
+    .categories::before {
+        content: '←→';
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        z-index: 1;
+        pointer-events: none;
+    }
+}
         }
 
         body {
