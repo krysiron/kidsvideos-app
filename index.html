@@ -266,6 +266,27 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+
+function filterVideos(category) {
+    currentFilter = category;
+    
+    // Actualizar botones de categoría
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // En modo landscape, centrar la categoría activa
+    if (window.innerHeight < window.innerWidth && window.innerHeight < 600) {
+        event.target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }
+    
+    renderVideos();
+}
         }
 
         .header {
