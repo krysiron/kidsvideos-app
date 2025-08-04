@@ -1089,7 +1089,7 @@
 
     <script>
         let videos = [];
-        let currentFilter = 'all';
+        
         let deferredPrompt;
         let configPassword = '1234';
         let currentPlaylist = [];
@@ -1779,7 +1779,7 @@
             if (filteredVideos.length === 0) {
                 grid.innerHTML = `
                     <div class="no-videos">
-                        <h3>🎬 ${currentFilter === 'all' ? '¡Bienvenido a KidsVideo!' : 'No hay videos en esta categoría'}</h3>
+                        <h3>🎬 ¡Bienvenido a KidsVideo!</h3>
                         <p>${currentFilter === 'all' 
                             ? 'Puedes agregar videos usando el botón ➕, sincronizar con otros dispositivos 🔄 o acceder a más opciones con el engranaje ⚙️' 
                             : 'Puedes agregar videos desde el botón ➕ o sincronizar con otros dispositivos 🔄'}</p>
