@@ -5,13 +5,14 @@
   "start_url": "./index.html",
   "id": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay"],
+  "display_override": [
+    "window-controls-overlay"
+  ],
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#667eea",
   "lang": "es",
   "scope": "./",
-  "categories": ["education", "kids", "entertainment"],
   "icons": [
     {
       "src": "./icon-72x72.png",
